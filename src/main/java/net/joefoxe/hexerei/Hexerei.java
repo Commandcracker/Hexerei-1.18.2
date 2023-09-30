@@ -72,6 +72,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -378,9 +379,11 @@ public class Hexerei
         MinecraftForge.EVENT_BUS.register(new WitchArmorEvent());
         MinecraftForge.EVENT_BUS.register(new CrowFluteEvent());
 
-        MinecraftForge.EVENT_BUS.register(new PageDrawing());
-        glassesZoomKeyPressEvent = new GlassesZoomKeyPressEvent();
-        MinecraftForge.EVENT_BUS.register(glassesZoomKeyPressEvent);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+            MinecraftForge.EVENT_BUS.register(new PageDrawing());
+            glassesZoomKeyPressEvent = new GlassesZoomKeyPressEvent();
+            MinecraftForge.EVENT_BUS.register(glassesZoomKeyPressEvent);
+        });
 
     }
 
